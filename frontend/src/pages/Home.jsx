@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { userDataContext } from "../context/UserContext";
 
 function Home() {
-  const { userData, serverUrl, setUserData, groqResponse } =
+  const { userData, serverUrl, setUserData, groqResponse, axiosInstance } =
     useContext(userDataContext);
 
   const navigate = useNavigate();
@@ -270,9 +270,7 @@ function Home() {
       stopListening();
       synthRef.current.cancel();
       
-      await axios.get(`${serverUrl}/api/auth/logout`, {
-        withCredentials: true,
-      });
+      await axiosInstance.get(`/api/auth/logout`);
       setUserData(null);
       navigate("/signin");
     } catch (error) {

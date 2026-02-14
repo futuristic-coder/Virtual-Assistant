@@ -8,26 +8,43 @@ function UserContext({ children }) {
   const [frontendImage, setFrontendImage] = useState(null);
   const [backendImage, setBackendImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // Create axios instance with interceptor
+  const axiosInstance = axios.create({
+    baseURL: serverUrl,
+    withCredentials: true,
+  });
+
+  // Response interceptor to handle 401 silently
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      // For 401 errors on /api/user/current, silently fail (user not logged in)
+      if (
+        error.response?.status === 401 &&
+        error.config.url === "/api/user/current"
+      ) {
+        return Promise.resolve({ data: null });
+      }
+      return Promise.reject(error);
+    }
+  );
+
   const handleCurrentUser = async () => {
     try {
-      const result = await axios.get(`${serverUrl}/api/user/current`, {
-        withCredentials: true,
-      });
-
-      setUserData(result.data);
-      console.log(result.data);
-    } catch (error) {
-      // Silently handle - 401 is expected when not logged in
-      // Only log actual errors (network, server errors, etc.)
-      if (error.response?.status !== 401 && error.code !== 'ERR_NETWORK') {
-        console.error("Error fetching current user:", error);
+      const result = await axiosInstance.get("/api/user/current");
+      if (result.data) {
+        setUserData(result.data);
+        console.log(result.data);
       }
+    } catch (error) {
+      console.error("Error fetching current user:", error);
     }
   };
 
   const groqResponse = async (command) => {
     try {
-      const result = await axios.post(`${serverUrl}/api/user/asktoassistant`, { command }, { withCredentials: true });
+      const result = await axiosInstance.post("/api/user/asktoassistant", { command });
       return result.data;
     } catch (error) {
       console.log(error);
@@ -48,7 +65,8 @@ function UserContext({ children }) {
     setBackendImage,
     selectedImage,
     setSelectedImage,
-    groqResponse
+    groqResponse,
+    axiosInstance,
   };
   return (
     <userDataContext.Provider value={value}>

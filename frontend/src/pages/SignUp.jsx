@@ -7,7 +7,7 @@ import axios from "axios";
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-  const { serverUrl,userData, setUserData } = useContext(userDataContext);
+  const { serverUrl,userData, setUserData, axiosInstance } = useContext(userDataContext);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,14 +23,13 @@ function Signup() {
 
 
     try {
-      let result = await axios.post(
-        `${serverUrl}/api/auth/signup`,
+      let result = await axiosInstance.post(
+        `/api/auth/signup`,
         {
           name,
           email,
           password,
-        },
-        { withCredentials: true },
+        }
       );
       setUserData(result.data);
       setLoading(false);

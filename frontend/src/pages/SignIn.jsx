@@ -7,7 +7,7 @@ import axios from "axios";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const { serverUrl,userData, setUserData  } = useContext(userDataContext);
+  const { serverUrl,userData, setUserData, axiosInstance  } = useContext(userDataContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,13 +21,12 @@ function SignIn() {
     setLoading(true);
 
     try {
-      let result = await axios.post(
-        `${serverUrl}/api/auth/signin`,
+      let result = await axiosInstance.post(
+        `/api/auth/signin`,
         {
           email,
           password,
-        },
-        { withCredentials: true },
+        }
       );
       setUserData(result.data);
       setLoading(false);
