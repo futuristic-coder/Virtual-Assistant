@@ -7,6 +7,9 @@ function Home() {
   const { userData, serverUrl, setUserData, groqResponse, axiosInstance } =
     useContext(userDataContext);
 
+  console.log("Home - userData:", userData);
+  console.log("Home - assistantImage:", userData?.assistantImage);
+
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [userText, setUserText] = useState("");

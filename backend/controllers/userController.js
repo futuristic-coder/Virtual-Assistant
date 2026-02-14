@@ -3,12 +3,25 @@ import User from "../models/userModel.js";
 import groqResponse from "../groq.js";
 import moment from "moment";
 
+import jwt from "jsonwebtoken";
+
 export const getCurrentUser = async (req, res) => {
   try {
-    const userId = req.userId;
+    // Try to get token from cookies
+    const token = req.cookies?.token;
     
-    // If no userId (not authenticated), return null
-    if (!userId) {
+    // If no token, user is not logged in - return null
+    if (!token) {
+      return res.status(200).json(null);
+    }
+    
+    // Verify token
+    let userId;
+    try {
+      const verifyToken = await jwt.verify(token, process.env.JWT_SECRET);
+      userId = verifyToken.userId;
+    } catch (err) {
+      // Invalid token - return null
       return res.status(200).json(null);
     }
     
