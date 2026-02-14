@@ -17,5 +17,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: true,
+    middlewareMode: false,
+    historyApiFallback: true,
   }
 })
