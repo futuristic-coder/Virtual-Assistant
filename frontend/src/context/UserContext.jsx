@@ -17,8 +17,9 @@ function UserContext({ children }) {
       setUserData(result.data);
       console.log(result.data);
     } catch (error) {
-      // Silently handle 401 errors (user not logged in)
-      if (error.response?.status !== 401) {
+      // Silently handle - 401 is expected when not logged in
+      // Only log actual errors (network, server errors, etc.)
+      if (error.response?.status !== 401 && error.code !== 'ERR_NETWORK') {
         console.error("Error fetching current user:", error);
       }
     }
