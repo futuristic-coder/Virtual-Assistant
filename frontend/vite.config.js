@@ -8,6 +8,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    sourcemap: false,
   },
   preview: {
     port: 4173,
@@ -17,6 +18,5 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: true,
-    middlewareMode: false,
   }
 })

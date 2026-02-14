@@ -17,20 +17,28 @@ if (!existsSync(distPath)) {
   process.exit(1);
 }
 
-// Serve static files from dist folder with caching disabled
+// Serve static files from dist folder
 app.use(express.static(distPath, {
-  maxAge: '1h',
-  etag: false
+  maxAge: 0,
+  etag: false,
+  lastModified: false
 }));
 
 // SPA fallback - all routes serve index.html
-app.get('*', (req, res) => {
-  console.log(`Route: ${req.path} -> serving index.html`);
-  res.sendFile(join(distPath, 'index.html'));
+app.use((req, res) => {
+  const indexPath = join(distPath, 'index.html');
+  console.log(`Route: ${req.path} -> serving ${indexPath}`);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('Error sending file:', err);
+      res.status(500).send('Error loading page');
+    }
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`✅ Frontend server running on port ${PORT}`);
   console.log(`📁 Serving from: ${distPath}`);
+});
 });
 });
