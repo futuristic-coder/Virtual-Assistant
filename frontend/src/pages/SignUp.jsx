@@ -2,13 +2,12 @@ import React, { useContext, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { userDataContext } from "../context/UserContext";
+import { userDataContext } from "../context/userContext";
 import axios from "axios";
-import { set } from "mongoose";
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-  const { serverUrl } = useContext(userDataContext);
+  const { serverUrl,userData, setUserData } = useContext(userDataContext);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,10 +32,12 @@ function Signup() {
         },
         { withCredentials: true },
       );
-      console.log(result.data);
+      setUserData(result.data);
       setLoading(false);
+      navigate("/customize");
     } catch (err) {
       console.error("Signup error:", err);
+      setUserData(null);
       setLoading(false);
       setErr(err.response.data.message || "An error occurred during signup.");
     }

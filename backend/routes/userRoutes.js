@@ -5,16 +5,11 @@ import {
   updateUserProfile,
 } from "../controllers/userController.js";
 import isAuth from "../middlewares/isAuth.js";
-// import upload from "../middlewares/multer.js";
+import upload from "../middlewares/multer.js";
 const userRouter = express.Router();
 
 userRouter.get("/current", isAuth, getCurrentUser);
-// userRouter.post(
-//   "/update-profile",
-//   isAuth,
-//   upload.single("assistantImage"),
-//   updateUserProfile,
-// );
-// userRouter.post("/asktoassistant", isAuth, askToAssistant);
+userRouter.post("/update-profile", isAuth, upload.single("assistantImage"), updateUserProfile);
+userRouter.post("/asktoassistant", isAuth, askToAssistant);
 
 export default userRouter;
