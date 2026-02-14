@@ -11,7 +11,7 @@ const Card = ({image}) => {
   
   return (
     <div 
-      className='group w-48 h-48 md:w-56 md:h-56 relative cursor-pointer transform transition-all duration-500 hover:scale-105'
+      className='group w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 relative cursor-pointer transform transition-all duration-500 hover:scale-105'
       onClick={() => setSelectedImage(image)}
     >
       {/* Outer glow effect */}
@@ -38,23 +38,23 @@ const Card = ({image}) => {
         }`}></div>
         
         {/* Corner accent lines */}
-        <div className={`absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-cyan-400 transition-all duration-300 ${
+        <div className={`absolute top-0 left-0 w-8 h-8 sm:w-12 sm:h-12 border-t-2 sm:border-t-4 border-l-2 sm:border-l-4 border-cyan-400 transition-all duration-300 ${
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}></div>
-        <div className={`absolute top-0 right-0 w-12 h-12 border-t-4 border-r-4 border-cyan-400 transition-all duration-300 ${
+        <div className={`absolute top-0 right-0 w-8 h-8 sm:w-12 sm:h-12 border-t-2 sm:border-t-4 border-r-2 sm:border-r-4 border-cyan-400 transition-all duration-300 ${
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}></div>
-        <div className={`absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-cyan-400 transition-all duration-300 ${
+        <div className={`absolute bottom-0 left-0 w-8 h-8 sm:w-12 sm:h-12 border-b-2 sm:border-b-4 border-l-2 sm:border-l-4 border-cyan-400 transition-all duration-300 ${
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}></div>
-        <div className={`absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-cyan-400 transition-all duration-300 ${
+        <div className={`absolute bottom-0 right-0 w-8 h-8 sm:w-12 sm:h-12 border-b-2 sm:border-b-4 border-r-2 sm:border-r-4 border-cyan-400 transition-all duration-300 ${
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}></div>
         
         {/* Selected indicator */}
         {isSelected && (
-          <div className="absolute inset-0 border-4 border-cyan-400 rounded-xl animate-pulse-border">
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-400/90 text-black px-6 py-2 rounded-full font-bold uppercase text-sm tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.8)]">
+          <div className="absolute inset-0 border-2 sm:border-4 border-cyan-400 rounded-xl animate-pulse-border">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-400/90 text-black px-3 sm:px-6 py-1 sm:py-2 rounded-full font-bold uppercase text-[10px] sm:text-sm tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.8)]">
               Selected
             </div>
           </div>

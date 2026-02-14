@@ -1,7 +1,7 @@
 // import uploadOnCloudinary from "../config/cloudinary.js";
 import User from "../models/userModel.js";
-// import ollamaResponse from "../ollama.js";
-// import moment from "moment";
+import groqResponse from "../groq.js";
+import moment from "moment";
 
 export const getCurrentUser = async (req, res) => {
   try {
@@ -43,47 +43,69 @@ export const askToAssistant = async (req, res) => {
   try {
     const { command } = req.body;
 
+    if (!command) {
+      return res.status(400).json({ response: "No command provided" });
+    }
+
     const user = await User.findById(req.userId);
-    user.history.push(command)
-    user.save()
+    if (!user) {
+      return res.status(404).json({ response: "User not found" });
+    }
+
+    user.history.push(command);
+    await user.save();
+    
     const userName = user.name;
     const assistantName = user.assistantName;
 
-    const result = await ollamaResponse(command,  assistantName,userName,);
+    console.log("🤖 Processing command:", command);
+    const result = await groqResponse(command, assistantName, userName);
+    console.log("🔍 Groq response:", result);
 
-    const jsonMatch = result.match(/{[\s\S]*}/);
-    if (!jsonMatch) {
-      return res.status(400).json({
-        response: "sorry, i can't understand",
+    if (!result || result === "Error generating response") {
+      return res.status(500).json({
+        type: "general",
+        userInput: command,
+        response: "Sorry, I'm having trouble connecting to my AI brain right now."
       });
     }
 
-    const gemResult = JSON.parse(jsonMatch[0]);
-    const type = gemResult.type;
+    const jsonMatch = result.match(/{[\s\S]*}/);
+    if (!jsonMatch) {
+      console.error("❌ Failed to extract JSON from:", result);
+      return res.status(400).json({
+        type: "general",
+        userInput: command,
+        response: "Sorry, I couldn't understand that properly.",
+      });
+    }
+
+    const groqResult = JSON.parse(jsonMatch[0]);
+    const type = groqResult.type;
 
     switch (type) {
       case "get-date":
         return res.json({
           type,
-          userInput: gemResult.userInput,
+          userInput: groqResult.userInput,
           response: `current date is ${moment().format("YYYY-MM-DD")}`,
         });
       case "get-time":
         return res.json({
           type,
-          userInput: gemResult.userInput,
+          userInput: groqResult.userInput,
           response: `current time is ${moment().format("hh:mm A")}`,
         });
       case "get-day":
         return res.json({
           type,
-          userInput: gemResult.userInput,
+          userInput: groqResult.userInput,
           response: `today is ${moment().format("dddd")}`,
         });
       case "get-month":
         return res.json({
           type,
-          userInput: gemResult.userInput,
+          userInput: groqResult.userInput,
           response: `today is ${moment().format("MMMM")}`,
         });
       case "google-search":
@@ -96,8 +118,8 @@ export const askToAssistant = async (req, res) => {
       case "weather-show":
         return res.json({
           type,
-          userInput: gemResult.userInput,
-          response: gemResult.response,
+          userInput: groqResult.userInput,
+          response: groqResult.response,
         });
         default:
           return res.status(400).json({response:"I didn't understand that command"})

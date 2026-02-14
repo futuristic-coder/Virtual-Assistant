@@ -21,15 +21,15 @@ function UserContext({ children }) {
     }
   };
 
-  // const getOllamaResponse= async (command)=>{
-  //   try{
-  //     const result=await axios.post(`${serverUrl}/api/user/asktoassistant`,{command},{withCredentials:true})
-  //     return result.data
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-
-  // }
+  const groqResponse = async (command) => {
+    try {
+      const result = await axios.post(`${serverUrl}/api/user/asktoassistant`, { command }, { withCredentials: true });
+      return result.data;
+    } catch (error) {
+      console.log(error);
+      return { type: "error", response: "Sorry, I couldn't process that request." };
+    }
+  };
 
   useEffect(() => {
     handleCurrentUser();
@@ -44,7 +44,7 @@ function UserContext({ children }) {
     setBackendImage,
     selectedImage,
     setSelectedImage,
-    // getOllamaResponse
+    groqResponse
   };
   return (
     <userDataContext.Provider value={value}>
