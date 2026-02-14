@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { userDataContext } from "../context/userContext";
+import { userDataContext } from "../context/UserContext";
 
 function Home() {
   const { userData, serverUrl, setUserData, groqResponse, axiosInstance } =
