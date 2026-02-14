@@ -9,43 +9,18 @@ function UserContext({ children }) {
   const [backendImage, setBackendImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // Create axios instance with interceptor
+  // Simple axios instance
   const axiosInstance = axios.create({
     baseURL: serverUrl,
     withCredentials: true,
-    validateStatus: (status) => {
-      // Don't reject on 401 for /api/user/current
-      return true; // Resolve all status codes
-    }
   });
-
-  // Response interceptor to handle 401 silently
-  axiosInstance.interceptors.response.use(
-    (response) => {
-      // If 401 on /api/user/current, return null data silently
-      if (
-        response.status === 401 &&
-        response.config.url === "/api/user/current"
-      ) {
-        return { data: null };
-      }
-      return response;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
 
   const handleCurrentUser = async () => {
     try {
       const result = await axiosInstance.get("/api/user/current");
-      if (result.data) {
-        setUserData(result.data);
-        console.log(result.data);
-      }
+      setUserData(result.data);
     } catch (error) {
-      // Silently handle - just don't set user data
-      // No logging for expected 401 errors
+      // Silently fail - user is not logged in
     }
   };
 
