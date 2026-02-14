@@ -18,6 +18,5 @@ export default defineConfig({
     strictPort: true,
     host: true,
     middlewareMode: false,
-    historyApiFallback: true,
   }
 })
