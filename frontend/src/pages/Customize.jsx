@@ -1,5 +1,5 @@
 import { RiImageAddLine } from "react-icons/ri";
-import { userDataContext } from "../context/userContext";
+import { userDataContext } from "../context/UserContext";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
