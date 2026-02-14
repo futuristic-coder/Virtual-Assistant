@@ -40,5 +40,3 @@ app.listen(PORT, () => {
   console.log(`✅ Frontend server running on port ${PORT}`);
   console.log(`📁 Serving from: ${distPath}`);
 });
-});
-});
