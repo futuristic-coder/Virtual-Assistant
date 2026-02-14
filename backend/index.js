@@ -13,7 +13,7 @@ import userRouter from "./routes/userRoutes.js";
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://virtual-assistant-aohk.onrender.com"],
+    origin: ["http://localhost:5173", "https://virtual-assistant-dfnk.onrender.com"],
     credentials: true,
   }),
 );
