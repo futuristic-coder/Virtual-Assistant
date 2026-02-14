@@ -1,4 +1,4 @@
-// import uploadOnCloudinary from "../config/cloudinary.js";
+import uploadOnCloudinary from "../config/cloudinary.js";
 import User from "../models/userModel.js";
 import groqResponse from "../groq.js";
 import moment from "moment";
@@ -19,7 +19,6 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
   try {
-    // const userId=req.userId;
     const { assistantName,imageUrl} = req.body;
     let assistantImage;
     if (req.file) {
