@@ -12,15 +12,15 @@ services:
       - key: NODE_ENV
         value: production
 
-  # Frontend Static Site
+  # Frontend Web Server
   - type: web
     name: virtual-assistant-frontend
-    runtime: static
-    env: static
+    runtime: node
+    env: node
     region: oregon
     plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    routes:
-      - path: /*
-        destination: /index.html
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
