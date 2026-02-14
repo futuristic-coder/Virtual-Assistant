@@ -19,12 +19,12 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
   try {
-    const { assistantName,imageUrl} = req.body;
+    const { assistantName, assistantImage: imageUrl } = req.body;
     let assistantImage;
     if (req.file) {
       assistantImage = await uploadOnCloudinary(req.file.path);
-    }else{
-      assistantImage=imageUrl
+    } else {
+      assistantImage = imageUrl;
     }
 
     const user = await User.findByIdAndUpdate(
