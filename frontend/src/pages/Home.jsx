@@ -1,14 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { userDataContext } from "../context/UserContext";
+import { userDataContext } from "../context/userContext";
 
 function Home() {
   const { userData, serverUrl, setUserData, groqResponse, axiosInstance } =
     useContext(userDataContext);
-
-  console.log("Home - userData:", userData);
-  console.log("Home - assistantImage:", userData?.assistantImage);
 
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
