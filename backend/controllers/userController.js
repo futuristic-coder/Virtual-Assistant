@@ -1,7 +1,7 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import User from "../models/userModel.js";
 import groqResponse from "../groq.js";
-import moment from "moment";
+import moment from "moment-timezone";
 
 import jwt from "jsonwebtoken";
 
@@ -107,25 +107,25 @@ export const askToAssistant = async (req, res) => {
         return res.json({
           type,
           userInput: groqResult.userInput,
-          response: `current date is ${moment().format("YYYY-MM-DD")}`,
+          response: `current date is ${moment().tz("Asia/Kolkata").format("YYYY-MM-DD")}`,
         });
       case "get-time":
         return res.json({
           type,
           userInput: groqResult.userInput,
-          response: `current time is ${moment().format("hh:mm A")}`,
+          response: `current time is ${moment().tz("Asia/Kolkata").format("hh:mm A")}`,
         });
       case "get-day":
         return res.json({
           type,
           userInput: groqResult.userInput,
-          response: `today is ${moment().format("dddd")}`,
+          response: `today is ${moment().tz("Asia/Kolkata").format("dddd")}`,
         });
       case "get-month":
         return res.json({
           type,
           userInput: groqResult.userInput,
-          response: `today is ${moment().format("MMMM")}`,
+          response: `today is ${moment().tz("Asia/Kolkata").format("MMMM")}`,
         });
       case "google-search":
       case "youtube-search":
