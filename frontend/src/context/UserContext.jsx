@@ -13,19 +13,25 @@ function UserContext({ children }) {
   const axiosInstance = axios.create({
     baseURL: serverUrl,
     withCredentials: true,
+    validateStatus: (status) => {
+      // Don't reject on 401 for /api/user/current
+      return true; // Resolve all status codes
+    }
   });
 
   // Response interceptor to handle 401 silently
   axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      // For 401 errors on /api/user/current, silently fail (user not logged in)
+    (response) => {
+      // If 401 on /api/user/current, return null data silently
       if (
-        error.response?.status === 401 &&
-        error.config.url === "/api/user/current"
+        response.status === 401 &&
+        response.config.url === "/api/user/current"
       ) {
-        return Promise.resolve({ data: null });
+        return { data: null };
       }
+      return response;
+    },
+    (error) => {
       return Promise.reject(error);
     }
   );
@@ -38,7 +44,8 @@ function UserContext({ children }) {
         console.log(result.data);
       }
     } catch (error) {
-      console.error("Error fetching current user:", error);
+      // Silently handle - just don't set user data
+      // No logging for expected 401 errors
     }
   };
 
